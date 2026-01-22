@@ -24,6 +24,29 @@ const mockProduct: Product = {
 vi.mock('../../hooks/useProduct');
 vi.mock('../../contexts/useCartContext');
 
+// Helper function to setup mocks
+const setupMocks = async (productData: Product | null | undefined) => {
+  const { useProduct } = await import('../../hooks/useProduct');
+  const { useCartContext } = await import('../../contexts/useCartContext');
+  
+  vi.mocked(useProduct).mockReturnValue({
+    data: productData,
+    isLoading: false,
+    isError: false,
+    error: null,
+  } as any);
+  
+  vi.mocked(useCartContext).mockReturnValue({
+    addToCart: mockAddToCart,
+    items: [],
+    removeFromCart: vi.fn(),
+    updateQuantity: vi.fn(),
+    clearCart: vi.fn(),
+    totalItems: 0,
+    totalPrice: 0,
+  });
+};
+
 describe('ProductActions Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -32,26 +55,7 @@ describe('ProductActions Component', () => {
   describe('Test 3: Add to Cart functionality', () => {
     it('should trigger addToCart when Add to Cart button is clicked with valid product', async () => {
       // Arrange
-      const { useProduct } = await import('../../hooks/useProduct');
-      const { useCartContext } = await import('../../contexts/useCartContext');
-      
-      vi.mocked(useProduct).mockReturnValue({
-        data: mockProduct,
-        isLoading: false,
-        isError: false,
-        error: null,
-      } as any);
-      
-      vi.mocked(useCartContext).mockReturnValue({
-        addToCart: mockAddToCart,
-        items: [],
-        removeFromCart: vi.fn(),
-        updateQuantity: vi.fn(),
-        clearCart: vi.fn(),
-        totalItems: 0,
-        totalPrice: 0,
-      });
-
+      await setupMocks(mockProduct);
       const user = userEvent.setup();
 
       // Act
@@ -66,25 +70,7 @@ describe('ProductActions Component', () => {
 
     it('should display Add to Cart button', async () => {
       // Arrange
-      const { useProduct } = await import('../../hooks/useProduct');
-      const { useCartContext } = await import('../../contexts/useCartContext');
-      
-      vi.mocked(useProduct).mockReturnValue({
-        data: mockProduct,
-        isLoading: false,
-        isError: false,
-        error: null,
-      } as any);
-      
-      vi.mocked(useCartContext).mockReturnValue({
-        addToCart: mockAddToCart,
-        items: [],
-        removeFromCart: vi.fn(),
-        updateQuantity: vi.fn(),
-        clearCart: vi.fn(),
-        totalItems: 0,
-        totalPrice: 0,
-      });
+      await setupMocks(mockProduct);
 
       // Act
       render(<ProductActions />);
@@ -98,26 +84,7 @@ describe('ProductActions Component', () => {
   describe('Test 4: Component handles missing or incomplete product data gracefully', () => {
     it('should not call addToCart when product data is undefined', async () => {
       // Arrange
-      const { useProduct } = await import('../../hooks/useProduct');
-      const { useCartContext } = await import('../../contexts/useCartContext');
-      
-      vi.mocked(useProduct).mockReturnValue({
-        data: undefined,
-        isLoading: false,
-        isError: false,
-        error: null,
-      } as any);
-      
-      vi.mocked(useCartContext).mockReturnValue({
-        addToCart: mockAddToCart,
-        items: [],
-        removeFromCart: vi.fn(),
-        updateQuantity: vi.fn(),
-        clearCart: vi.fn(),
-        totalItems: 0,
-        totalPrice: 0,
-      });
-
+      await setupMocks(undefined);
       const user = userEvent.setup();
 
       // Act
@@ -131,26 +98,7 @@ describe('ProductActions Component', () => {
 
     it('should not call addToCart when product data is null', async () => {
       // Arrange
-      const { useProduct } = await import('../../hooks/useProduct');
-      const { useCartContext } = await import('../../contexts/useCartContext');
-      
-      vi.mocked(useProduct).mockReturnValue({
-        data: null,
-        isLoading: false,
-        isError: false,
-        error: null,
-      } as any);
-      
-      vi.mocked(useCartContext).mockReturnValue({
-        addToCart: mockAddToCart,
-        items: [],
-        removeFromCart: vi.fn(),
-        updateQuantity: vi.fn(),
-        clearCart: vi.fn(),
-        totalItems: 0,
-        totalPrice: 0,
-      });
-
+      await setupMocks(null);
       const user = userEvent.setup();
 
       // Act
@@ -164,25 +112,7 @@ describe('ProductActions Component', () => {
 
     it('should render button even when product data is missing', async () => {
       // Arrange
-      const { useProduct } = await import('../../hooks/useProduct');
-      const { useCartContext } = await import('../../contexts/useCartContext');
-      
-      vi.mocked(useProduct).mockReturnValue({
-        data: undefined,
-        isLoading: false,
-        isError: false,
-        error: null,
-      } as any);
-      
-      vi.mocked(useCartContext).mockReturnValue({
-        addToCart: mockAddToCart,
-        items: [],
-        removeFromCart: vi.fn(),
-        updateQuantity: vi.fn(),
-        clearCart: vi.fn(),
-        totalItems: 0,
-        totalPrice: 0,
-      });
+      await setupMocks(undefined);
 
       // Act
       render(<ProductActions />);
