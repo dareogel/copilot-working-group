@@ -26,7 +26,7 @@ vi.mock('../ProductActions', () => ({
 }));
 
 describe('ProductDetail Component', () => {
-  describe('Test 1: Component renders correctly with sample product data', () => {
+  describe('Test 1: Component renders correctly', () => {
     it('should render the ProductDetail component with all its sections', () => {
       // Act
       render(<ProductDetail />);
@@ -41,9 +41,9 @@ describe('ProductDetail Component', () => {
   });
 
   describe('Test 2: Component displays all subcomponents', () => {
-    it('should display ProductImage, ProductInfo, ProductMeta, and ProductActions subcomponents', () => {
+    it('should display ProductImage, ProductInfo, ProductMeta, and ProductActions in correct structure', () => {
       // Act
-      render(<ProductDetail />);
+      const { container } = render(<ProductDetail />);
 
       // Assert - Verify all key subcomponents are present
       const productImage = screen.getByTestId('product-image');
@@ -55,21 +55,12 @@ describe('ProductDetail Component', () => {
       expect(productInfo).toBeInTheDocument();
       expect(productMeta).toBeInTheDocument();
       expect(productActions).toBeInTheDocument();
-    });
-
-    it('should render subcomponents in the correct structure', () => {
-      // Act
-      const { container } = render(<ProductDetail />);
 
       // Assert - Check DOM structure
       const infoSection = container.querySelector('[class*="infoSection"]');
       expect(infoSection).toBeInTheDocument();
       
       // Info section should contain ProductInfo, ProductMeta, and ProductActions
-      const productInfo = screen.getByTestId('product-info');
-      const productMeta = screen.getByTestId('product-meta');
-      const productActions = screen.getByTestId('product-actions');
-      
       expect(infoSection).toContainElement(productInfo);
       expect(infoSection).toContainElement(productMeta);
       expect(infoSection).toContainElement(productActions);

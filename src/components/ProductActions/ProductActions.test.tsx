@@ -1,8 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { ProductActions } from './index';
 import type { Product } from '../../types/product';
+import type { UseQueryResult } from '@tanstack/react-query';
 
 // Mock dependencies
 const mockAddToCart = vi.fn();
@@ -34,7 +35,7 @@ const setupMocks = async (productData: Product | null | undefined) => {
     isLoading: false,
     isError: false,
     error: null,
-  } as any);
+  } as UseQueryResult<Product, Error>);
   
   vi.mocked(useCartContext).mockReturnValue({
     addToCart: mockAddToCart,
